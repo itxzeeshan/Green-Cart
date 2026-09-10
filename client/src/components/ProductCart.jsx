@@ -23,7 +23,7 @@ const ProductCart = ({ product }) => {
         <div className="group cursor-pointer flex items-center justify-center px-2">
           <img
             className="group-hover:scale-105 transition max-w-26 md:max-w-36"
-            src={product.images[0]}
+            src={product.image[0]}
             alt={product.name}
           />
         </div>
