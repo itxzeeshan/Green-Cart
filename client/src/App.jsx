@@ -7,6 +7,8 @@ import Footer from "./components/Footer";
 import { useAppContext } from "./context/AppContext";
 import Login from "./components/Login";
 import AllProducts from "./pages/AllProducts";
+import ProductCategory from "./pages/ProductCategory";
+import ProductDetails from "./pages/ProductDetails";
 
 const App = () => {
   const isSellerPath = useLocation().pathname.includes("seller");
@@ -24,6 +26,8 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<AllProducts />} />
+          <Route path="/products/:category" element={<ProductCategory />} />
+          <Route path="/products/:category/:id" element={<ProductDetails />} />
         </Routes>
       </div>
       {!isSellerPath && <Footer />}

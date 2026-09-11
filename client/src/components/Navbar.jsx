@@ -18,7 +18,10 @@ const Navbar = () => {
     getCartCount,
   } = useAppContext();
 
-  const logout = async () => {};
+  const logout = async () => {
+    setUser(null);
+    navigate("/");
+  };
 
   useEffect(() => {
     if (searchQuery.length > 0) {
