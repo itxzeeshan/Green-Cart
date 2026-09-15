@@ -9,8 +9,18 @@ function Login() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
-  const onSubmitHandler = async (e) => {
+  const { setShowUserLogin, setUser, navigate } = useAppContext();
+
+  const onSubmitHandler = (e) => {
     e.preventDefault();
+
+    setUser({
+      name: name || "Demo User",
+      email: email,
+    });
+
+    setShowUserLogin(false);
+    navigate("/");
   };
 
   return (
