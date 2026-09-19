@@ -1,3 +1,7 @@
+import dns from "dns";
+
+dns.setServers(["8.8.8.8", "1.1.1.1"]);
+
 import cookieParser from "cookie-parser";
 import express from "express";
 import cors from "cors";
@@ -29,6 +33,13 @@ const allowedOrigins = [
 // Middleware Configuration
 app.use(express.json());
 app.use(cookieParser());
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  }),
+);
 // app.use((req, res, next) => {
 //     const origin = req.headers.origin;
 //     if (allowedOrigins.includes(origin)) {
