@@ -4,23 +4,32 @@ import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
 import toast from "react-hot-toast";
 
 function Login() {
+  const { setShowUserLogin, setUser, axios, navigate, fetchUser } =
+    useAppContext();
+
   const [state, setState] = React.useState("login");
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
-  const { setShowUserLogin, setUser, navigate } = useAppContext();
-
-  const onSubmitHandler = (e) => {
-    e.preventDefault();
-
-    setUser({
-      name: name || "Demo User",
-      email: email,
-    });
-
-    setShowUserLogin(false);
-    navigate("/");
+  const onSubmitHandler = async (e) => {
+    try {
+      e.preventDefault();
+      const { data } = await axios.post(`/api/user/${state}`, {
+        name,
+        email,
+        password,
+      });
+      if (data.success) {
+        navigate("/");
+        await fetchUser();
+        setShowUserLogin(false);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   return (

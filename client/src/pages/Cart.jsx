@@ -25,48 +25,48 @@ const Cart = () => {
   const [paymentOption, setPaymentOption] = useState("COD");
 
   const placeOrder = async () => {
-    // try {
-    //   if (!selectedAddress) {
-    //     return toast.error("Please select an address");
-    //   }
-    //   // Place order with COD
-    //   if (paymentOption === "COD") {
-    //     const { data } = await axios.post("/api/order/cod", {
-    //       userId: user._id,
-    //       items: cartArray.map((item) => ({
-    //         product: item._id,
-    //         quantity: item.quantity,
-    //       })),
-    //       address: selectedAddress._id,
-    //     });
-    //     if (data.success) {
-    //       toast.success(data.message);
-    //       setCartItems({});
-    //       navigate("/my-orders");
-    //     } else {
-    //       toast.error(data.message);
-    //     }
-    //   }
-    //   // Place order with Stripe
-    //   else {
-    //     const { data } = await axios.post("/api/order/stripe", {
-    //       userId: user._id,
-    //       items: cartArray.map((item) => ({
-    //         product: item._id,
-    //         quantity: item.quantity,
-    //       })),
-    //       address: selectedAddress._id,
-    //     });
-    //     if (data.success) {
-    //       setCartItems({});
-    //       window.location.replace(data.url);
-    //     } else {
-    //       toast.error(data.message);
-    //     }
-    //   }
-    // } catch (error) {
-    //   toast.error(error.message);
-    // }
+    try {
+      if (!selectedAddress) {
+        return toast.error("Please select an address");
+      }
+      // Place order with COD
+      if (paymentOption === "COD") {
+        const { data } = await axios.post("/api/order/cod", {
+          userId: user._id,
+          items: cartArray.map((item) => ({
+            product: item._id,
+            quantity: item.quantity,
+          })),
+          address: selectedAddress._id,
+        });
+        if (data.success) {
+          toast.success(data.message);
+          setCartItems({});
+          navigate("/my-orders");
+        } else {
+          toast.error(data.message);
+        }
+      }
+      // Place order with Stripe
+      else {
+        const { data } = await axios.post("/api/order/stripe", {
+          userId: user._id,
+          items: cartArray.map((item) => ({
+            product: item._id,
+            quantity: item.quantity,
+          })),
+          address: selectedAddress._id,
+        });
+        if (data.success) {
+          setCartItems({});
+          window.location.replace(data.url);
+        } else {
+          toast.error(data.message);
+        }
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   const getCart = () => {
@@ -142,7 +142,7 @@ const Cart = () => {
               >
                 <img
                   className="max-w-full h-full object-cover"
-                  src={product.image[0]}
+                  src={product.images[0]}
                   alt={product.name}
                 />
               </div>

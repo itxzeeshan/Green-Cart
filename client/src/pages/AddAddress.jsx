@@ -41,13 +41,27 @@ function AddAddress() {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
+    try {
+      const { data } = await axios.post("/api/address/add", {
+        address,
+        userId: user._id,
+      });
+      if (data.success) {
+        toast.success(data.message);
+        navigate("/cart");
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
-  //   useEffect(() => {
-  //     if (!user) {
-  //       navigate("/cart");
-  //     }
-  //   }, []);
+  useEffect(() => {
+    if (!user) {
+      navigate("/cart");
+    }
+  }, []);
 
   return (
     <div className="mt-12 pb-12">

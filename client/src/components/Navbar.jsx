@@ -5,7 +5,7 @@ import { useAppContext } from "../context/AppContext.jsx";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
-const Navbar = () => {
+function Navbar() {
   const [open, setOpen] = useState(false);
   const {
     user,
@@ -16,11 +16,24 @@ const Navbar = () => {
     searchQuery,
     getCartAmount,
     getCartCount,
+    axios,
   } = useAppContext();
 
   const logout = async () => {
-    setUser(null);
-    navigate("/");
+    try {
+      const { data } = await axios.get("/api/user/logout", {
+        withCredentials: true,
+      });
+      if (data.success) {
+        toast.success(data.message);
+        setUser(null);
+        navigate("/");
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   useEffect(() => {
@@ -186,6 +199,6 @@ const Navbar = () => {
       )}
     </nav>
   );
-};
+}
 
 export default Navbar;
