@@ -14,7 +14,7 @@ import productRouter from "./routes/productRoute.js";
 import cartRouter from "./routes/cartRoute.js";
 import addressRouter from "./routes/addressRoute.js";
 import orderRouter from "./routes/orderRoute.js";
-// import { stripeWebhooks } from './controllers/orderController.js';
+import { stripeWebhooks } from "./controllers/orderController.js";
 
 const app = express();
 
@@ -25,10 +25,10 @@ await connectCloudinary();
 // Allow multiple origins
 const allowedOrigins = [
   "http://localhost:5173",
-  //   "https://greencart-sand.vercel.app",
+  // "https://greencart-sand.vercel.app",
 ];
 
-// app.post('/stripe', express.raw({type: 'application/json'}), stripeWebhooks);
+app.post("/stripe", express.raw({ type: "application/json" }), stripeWebhooks);
 
 // Middleware Configuration
 app.use(express.json());
@@ -40,16 +40,16 @@ app.use(
     credentials: true,
   }),
 );
-// app.use((req, res, next) => {
-//     const origin = req.headers.origin;
-//     if (allowedOrigins.includes(origin)) {
-//         res.header('Access-Control-Allow-Origin', origin); // dynamically set origin
-//     }
-//     res.header('Access-Control-Allow-Credentials', 'true');
-//     res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
-//     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-//     next();
-// });
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.header("Access-Control-Allow-Origin", origin); // dynamically set origin
+  }
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  next();
+});
 
 app.get("/", (req, res) => res.send("API is working!"));
 app.use("/api/user", userRouter);

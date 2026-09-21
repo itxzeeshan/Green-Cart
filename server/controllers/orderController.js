@@ -71,6 +71,9 @@ export const placeOrderStripe = async (req, res) => {
       isPaid: false,
     });
 
+    // Stripe Gateaway initialize
+    const stripeInstance = new stripe(process.env.STRIPE_SECRET_KEY);
+
     // Stripe line items
     const line_items = productData.map((item) => ({
       price_data: {
