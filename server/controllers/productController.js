@@ -5,20 +5,50 @@ import Product from "../models/Product.js";
 export const addProduct = async (req, res) => {
   try {
     let productData = JSON.parse(req.body.productData);
+
     const images = req.files;
+
+    console.log("FILES:", images);
+
     let imagesUrl = await Promise.all(
       images.map(async (item) => {
+        console.log("UPLOADING:", item.path);
+
         let result = await cloudinary.uploader.upload(item.path, {
           resource_type: "image",
         });
+
+        console.log("CLOUDINARY RESULT:", result);
+
+        console.log("UPLOAD SUCCESS:", result.secure_url);
+
         return result.secure_url;
       }),
     );
-    await Product.create({ ...productData, images: imagesUrl });
-    res.json({ success: true, message: "Product Added" });
+
+    console.log("Image url: ", imagesUrl);
+
+    await Product.create({
+      ...productData,
+      image: null,
+    });
+
+    res.json({
+      success: true,
+      message: "Product Added",
+    });
   } catch (error) {
-    console.log(error.message);
-    res.json({ success: false, message: error.message });
+    console.log("========== PRODUCT UPLOAD ERROR ==========");
+    console.log(error);
+    console.log("MESSAGE:", error.message);
+    console.log("HTTP CODE:", error.http_code);
+    console.log("NAME:", error.name);
+    console.log("==========================================");
+
+    res.json({
+      success: false,
+      message: error.message,
+    });
   }
 };
 
