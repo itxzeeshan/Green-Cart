@@ -5,22 +5,12 @@ const connectCloudinary = async () => {
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET,
-    secure: true,
-    debug: true,
   });
 
   console.log("Cloudinary configured");
-
   console.log("Cloud name:", process.env.CLOUDINARY_CLOUD_NAME);
   console.log("API key exists:", !!process.env.CLOUDINARY_API_KEY);
   console.log("API secret exists:", !!process.env.CLOUDINARY_API_SECRET);
-
-  try {
-    const result = await cloudinary.api.ping();
-    console.log("Cloudinary Ping:", result);
-  } catch (error) {
-    console.log("Cloudinary Ping Error:", error);
-  }
 };
 
 export default connectCloudinary;

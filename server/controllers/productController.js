@@ -4,46 +4,60 @@ import Product from "../models/Product.js";
 // Add Product : /api/product/add
 export const addProduct = async (req, res) => {
   try {
-    let productData = JSON.parse(req.body.productData);
+    const productData = JSON.parse(req.body.productData);
 
-    const images = req.files;
+    console.log("PRODUCT DATA:", productData);
+    console.log("FILES:", req.files);
 
-    console.log("FILES:", images);
+    // Agar images nahi aayi to product create hi mat karo
+    if (!req.files || req.files.length === 0) {
+      return res.json({
+        success: false,
+        message: "No images received",
+      });
+    }
 
-    let imagesUrl = await Promise.all(
-      images.map(async (item) => {
-        console.log("UPLOADING:", item.path);
+    const imagesUrl = [];
 
-        let result = await cloudinary.uploader.upload(item.path, {
-          resource_type: "image",
-        });
+    for (const item of req.files) {
+      console.log("UPLOADING:", item.path);
 
-        console.log("CLOUDINARY RESULT:", result);
+      const result = await cloudinary.uploader.upload(item.path);
 
-        console.log("UPLOAD SUCCESS:", result.secure_url);
+      console.log("CLOUDINARY RESULT:", result);
 
-        return result.secure_url;
-      }),
-    );
+      imagesUrl.push(result.secure_url);
+    }
 
-    console.log("Image url: ", imagesUrl);
+    console.log("FINAL IMAGES URL:", imagesUrl);
 
-    await Product.create({
+    const product = await Product.create({
       ...productData,
-      image: null,
+      images: imagesUrl,
     });
+
+    console.log("PRODUCT CREATED:", product);
 
     res.json({
       success: true,
       message: "Product Added",
     });
   } catch (error) {
-    console.log("========== PRODUCT UPLOAD ERROR ==========");
-    console.log(error);
+    console.log("========== PRODUCT ERROR ==========");
+
     console.log("MESSAGE:", error.message);
     console.log("HTTP CODE:", error.http_code);
     console.log("NAME:", error.name);
-    console.log("==========================================");
+
+    console.log("FULL ERROR:", error);
+
+    if (error.response) {
+      console.log("RESPONSE:", error.response);
+      console.log("RESPONSE DATA:", error.response.data);
+      console.log("RESPONSE HEADERS:", error.response.headers);
+    }
+
+    console.log("==================================");
 
     res.json({
       success: false,
